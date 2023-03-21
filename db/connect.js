@@ -1,2 +1,10 @@
-const connectionString =
-  "mongodb+srv://armagantas:Armagantas123@cluster0.sm18ayd.mongodb.net/test";
+const mongoose = require("mongoose");
+
+const connectDB = (url) => {
+  return mongoose.connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+};
+
+module.exports = connectDB;
