@@ -3,18 +3,18 @@ const app = express();
 const tasks = require("./routes/tasks");
 const connectDB = require("./db/connect");
 const { connect } = require("mongoose");
+const notFound = require("./middleware/not-found");
 require("dotenv").config();
 
 //middlewares
-
+app.use(express.static("./public"));
 app.use(express.json());
 
 //routes
-app.get("/", (req, res) => {
-  res.send("Task Manager App");
-});
 
 app.use("/api/v1/tasks", tasks);
+
+app.use(notFound);
 
 const port = 3000;
 

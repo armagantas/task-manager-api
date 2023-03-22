@@ -2,9 +2,10 @@ const Task = require("../models/task");
 
 const getAllTasks = async (req, res) => {
   try {
-    const getTask = await Task.find();
+    const getTask = await Task.find({});
     res.status(200).json({
-      getTask,
+      success: true,
+      data: { getTask },
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -43,6 +44,7 @@ const updateTask = async (req, res) => {
     const { id } = req.params;
     const updateTask = await Task.findByIdAndUpdate(id, req.body, {
       new: true,
+      runValidator: true,
     });
     if (!updateTask)
       return res.status(404).json({ message: `No task with id : ${id}` });
@@ -64,6 +66,25 @@ const deleteTask = async (req, res) => {
     res.status(201).json({
       message: "Task has been deleted",
       deletedTask,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const editTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateTask = await Task.findByIdAndUpdate(id, req.body, {
+      new: true,
+      overwrite: true,
+      runValidators: true,
+    });
+    if (!updateTask)
+      return res.status(404).json({ message: `No task with id : ${id}` });
+    res.status(200).json({
+      message: "Task has been updated.",
+      updateTask,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
